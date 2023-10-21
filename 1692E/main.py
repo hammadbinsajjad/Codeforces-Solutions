@@ -9,7 +9,7 @@ import operator as op
 import copy as cp
 import queue as q
 
-to_debug = False
+to_debug = True
 def solve():
     n, k = inp_map()
     a = inp_list(int)
@@ -19,44 +19,17 @@ def solve():
     if s < k:
         print(-1)
         return
-
-    left = [(i + 1) for i in range(n) if a[i] == 1]
-    right = [(n - i) for i in range(n - 1, -1, -1) if a[i] == 1]
-
-    left_turn = 0
-    right_turn = 0
-
-    debug(left)
-    debug(right)
-
+    
     l = 0
-    r = 0
-    c = 0
-    while s > k:
-        debug(l, r)
-        if left[l] == right[r]:
-            if left_turn > right_turn:
-                c += left[l] - left_turn
-                l += 1
-                right.pop()
-                left_turn += 1
-            else:
-                c += right[r] - right_turn
-                r += 1
-                left.pop()
-                right_turn += 1
-        elif left[l] < right[r]:
-            c += left[l] - left_turn
+    cur = 0
+    res = -1
+    for r in range(n):
+        cur += a[r]
+        while cur > k:
+            cur -= a[l]
             l += 1
-            right.pop()
-            left_turn += 1
-        else:
-            c += right[r] - right_turn
-            r += 1
-            left.pop()
-            right_turn += 1
-        s -= 1
-    print(c)
+        res = max(res, r - l + 1)
+    print(n - res)
         
 
 def main():
